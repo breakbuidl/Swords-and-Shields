@@ -15,7 +15,13 @@ export default class BootScene extends Phaser.Scene {
         this.load.image('play', 'act1scene1/play.png');
         this.load.image('playAgain', 'act1scene1/playAgain.png');
         this.load.image('quit', 'act1scene1/quit.png');
+        this.load.image('create', 'act2scene1/create.png');
+        this.load.image('patternDefault', 'act2scene1/patternDefault.png');
         this.load.image('ai', 'act3scene1/AI.png');
+        // this.load.plugin('rexdragplugin',
+        //                  'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexdragplugin.min.js',
+        //                  true);
+
 	}
 
 	create() {
