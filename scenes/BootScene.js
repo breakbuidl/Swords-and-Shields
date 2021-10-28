@@ -15,6 +15,7 @@ export default class BootScene extends Phaser.Scene {
         this.load.image('play', 'act1scene1/play.png');
         this.load.image('playAgain', 'act1scene1/playAgain.png');
         this.load.image('quit', 'act1scene1/quit.png');
+        this.load.image('ai', 'act3scene1/AI.png');
 	}
 
 	create() {

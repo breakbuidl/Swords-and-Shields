@@ -27,5 +27,9 @@ export default class HomeScene extends Phaser.Scene {
         play.on('pointerdown', function() {
 			this.scene.start('PlayGameScene');
 		}, this);
+        let ai = this.add.image(width / 2.5, height / 1.7, 'ai').setInteractive();
+        ai.on('pointerdown', function() {
+			this.scene.start('PlayAIScene');
+		}, this);
 	}
 }
