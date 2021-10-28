@@ -1,6 +1,7 @@
 import BootScene from '/scenes/BootScene.js';
 import HomeScene from '/scenes/HomeScene.js';
 import PlayGameScene from '/scenes/PlayGameScene.js';
+import RoundRectangleCanvasPlugin from '/node_modules/phaser3-rex-plugins/plugins/roundrectanglecanvas-plugin.js';
 
 window.onload = function() {
 
@@ -14,6 +15,13 @@ window.onload = function() {
         scale: {
             mode: Phaser.Scale.FIT,
             autoCenter: Phaser.Scale.CENTER_BOTH,
+        },
+        plugins: {
+            global: [{
+                key: 'rexRoundRectangleCanvasPlugin',
+                plugin: RoundRectangleCanvasPlugin,
+                start: true
+            }]
         }
     };
 
