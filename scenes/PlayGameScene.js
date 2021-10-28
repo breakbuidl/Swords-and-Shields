@@ -2,10 +2,16 @@ const NOBODY = 0;
 const PLAYER_SWORD = 1;
 const PLAYER_SHIELD = 2;
 
+var winner = 0;
+
 export default class PlayGameScene extends Phaser.Scene {
 
     constructor() {
         super('PlayGameScene');
+    }
+
+    init(data) {
+        this.tieBreakerPattern = data.tieBreakerPattern;
     }
 
     create() {
@@ -34,7 +40,7 @@ export default class PlayGameScene extends Phaser.Scene {
 
         // hard-coded for the time being
         let x = 840;
-        let y = 340;
+        let y = 330;
         let cellKey = 0;
 
         for (var row = 0; row < 4; row++) {
@@ -54,11 +60,40 @@ export default class PlayGameScene extends Phaser.Scene {
             }
         }
 
-        self.whoseTurnIsIt();
+        this.add.rexRoundRectangleCanvas(width / 2.3, height / 1.33, 205, 100, 30, 0xBF9001, 0xBF9001, 2);
+        this.add.image(width / 2.3, height / 1.33, this.tieBreakerPattern).setScale(0.6);
+
+        this.label = this.add.text(width / 2, height / 1.35, "Player 1's turn",
+                                   { fontSize: '28px Arial', fontStyle: 'bold', fill: '#BF9001' });
+        this.label.setOrigin(0,0);
+    }
+
+    whoseTurnIsIt() {
+        let self = this;
+        let t = (this.whoseTurn == PLAYER_SWORD ? "Player 1's turn" : "Player 2's turn");
+        console.log(winner);
+        if (winner) {
+            switch (winner) {
+                case 1:
+                    t = "PLAYER 1 WON";
+                    break;
+                case 2:
+                    t = "PLAYER 2 WON";
+                    break;
+                case 3:
+                    t = "IT'S A TIE!";
+                    break;
+            }
+            this.label.setText(t);
+            setTimeout(function() {
+                self.scene.start('PlayAgainScene', {text: t,
+                                                   previousScene: "PlayGameScene"});
+            }, 800);
+        }
+        this.label.text = t;
     }
 
     handleClick(event) {
-        console.log(this);
         let offset = this.cellKey;
         let owner = this.scene;
 
@@ -86,7 +121,7 @@ export default class PlayGameScene extends Phaser.Scene {
 			owner.boardArray[offset].occupiedBy = occupiedBy;
             owner.boardArray[offset].playerImage = playerImage;
 
-            owner.checkForWinner(owner.whoseTurn);
+            winner = owner.checkForWinner(owner.whoseTurn);
 
             if (owner.whoseTurn == PLAYER_SWORD) {
 				owner.whoseTurn = PLAYER_SHIELD;
@@ -98,23 +133,6 @@ export default class PlayGameScene extends Phaser.Scene {
 
 		owner.whoseTurnIsIt();
 	}
-
-    whoseTurnIsIt() {
-        let x = this.game.config.width / 2;
-        let y = this.game.config.height / 1.35;
-        let t = (this.whoseTurn == PLAYER_SWORD ? "Player 1's turn" : "Player 2's turn");
-
-        let label = this.add.text(x, y, t, { fontSize: '32px Arial', fontStyle: 'bold', fill: '#CB9A30' });
-        label.setOrigin(0.5, 0.5);
-
-        //todo - make the concerned label permanent
-        this.tweens.add({
-			targets: label,
-			alpha: 0,
-			ease: 'Power1',
-            duration: 4000,
-		});
-    }
 
     checkForWinner(playerID) {
         let possibleWins = [
@@ -137,8 +155,11 @@ export default class PlayGameScene extends Phaser.Scene {
 				(this.boardArray[winLine[1]].occupiedBy == playerID) &&
                 (this.boardArray[winLine[2]].occupiedBy == playerID) &&
 				(this.boardArray[winLine[3]].occupiedBy == playerID)) {
-                    this.broadcastWinner(playerID, winLine);
-					return true;
+                    if (playerID == PLAYER_SWORD) {
+                        return 1;
+                    } else {
+                        return 2;
+                    }
 			}
 		}
 
@@ -149,17 +170,12 @@ export default class PlayGameScene extends Phaser.Scene {
 			}
 		}
 
+        // Tie
         if (!movesLeft) {
-			this.broadcastWinner(NOBODY);
+			return 3;
 		}
 
-		return false;
+        // Game is still on
+		return 0;
     }
-
-	broadcastWinner(playerID, winLine) {
-		this.gameOver = true;
-        console.log(playerID + " wins");
-
-        this.scene.start('PlayGameScene');
-	}
 }
