@@ -16,8 +16,8 @@ export default class PlayAIScene extends Phaser.Scene {
 
     create() {
 
-        var width = this.game.config.width;
-        var height = this.game.config.height;
+        let width = this.game.config.width;
+        let height = this.game.config.height;
 
         let self = this;
         self.gameOver = false;
@@ -27,13 +27,12 @@ export default class PlayAIScene extends Phaser.Scene {
         self.board = [];  // one to move around
         self.totalCellsOccupied = 0;
 
-        // todo - if image loaded in smaller/different (not full screen) sized  window
-        //  and then window size changed, e j image scale thase, e change karvanu che
+        // TODO - window size adjustable
         this.make.image({
             x: width / 2,
             y: height / 2,
             key: 'background',
-            //koi pan size ni browser window kholo, barobar scale mate
+            //scale according to brower window
             scale: {x: width / (1.2 * 3840), y: height / 2160}
         });
 
@@ -41,7 +40,7 @@ export default class PlayAIScene extends Phaser.Scene {
         this.add.image(width / 2, height / 6.8, 'logo').setScale(2.2);
 
         // Add GameBoard
-        var gameBoard = this.add.image(width / 2, height / 1.7, 'gameBoard').setScale(1.3);
+        let gameBoard = this.add.image(width / 2, height / 1.7, 'gameBoard').setScale(1.3);
 
         //cell.png: width 70, height 71
         let x = (width / 2) - (295 / 2) + 30;
@@ -76,8 +75,7 @@ export default class PlayAIScene extends Phaser.Scene {
     whoseTurnIsIt() {
         let self = this;
         let t = (this.whoseTurn == PLAYER_SWORD ? "Your turn" : "AI is thinking");
-        console.log(winner);
-        console.log(this.totalCellsOccupied);
+
         if (winner) {
             switch (winner) {
                 case 1:
@@ -94,8 +92,8 @@ export default class PlayAIScene extends Phaser.Scene {
             self.scene.start('PlayAgainScene', {text: t,
                                                    previousScene: "PlayAIScene"});
             // setTimeout(function() {
-            //     self.scene.start('PlayAgainScene', {text: t,
-            //                                        previousScene: "PlayAIScene"});
+            //     self.scene.start('PlayAgainScene',
+            //                      {text: t, previousScene: "PlayAIScene"});
             // }, 800);
         }
         this.label.setText(t);
@@ -164,7 +162,7 @@ export default class PlayAIScene extends Phaser.Scene {
 
     alphaBetaMinimax(node, depth, alpha, beta) {
         // If game is over or too long, return simulation score
-        var gameState = this.checkForWinner(node);
+        let gameState = this.checkForWinner(node);
         if (gameState !== 0 || depth > depthLimit)
             return this.gameScore(gameState, depth);
 
@@ -195,7 +193,7 @@ export default class PlayAIScene extends Phaser.Scene {
             return alpha;
         }
         else {
-            for (var i = 0; i < availableMoves.length; i++) {
+            for (let i = 0; i < availableMoves.length; i++) {
                 // Run alphaBetaMinimax for every UNOCCUPIED move
                 move = availableMoves[i];
                 // Get simulation score
@@ -219,7 +217,7 @@ export default class PlayAIScene extends Phaser.Scene {
     // Gets an array of moves not claimed by either player
     getAvailableMoves(board) {
       var possibleMoves = new Array();
-      for (var i = 0; i < this.boardArray.length; i++) {
+      for (let i = 0; i < this.boardArray.length; i++) {
           if (this.boardArray[i].occupiedBy === NOBODY)
               possibleMoves.push(i);
       }

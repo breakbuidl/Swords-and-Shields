@@ -16,8 +16,8 @@ export default class PlayGameScene extends Phaser.Scene {
 
     create() {
 
-        var width = this.game.config.width;
-        var height = this.game.config.height;
+        let width = this.game.config.width;
+        let height = this.game.config.height;
 
         let self = this;
         self.gameOver = false;
@@ -25,17 +25,19 @@ export default class PlayGameScene extends Phaser.Scene {
 
         self.boardArray = [];
 
-        // todo - if image loaded in smaller/different (not full screen) sized  window
-        //  and then window size changed, e j image scale thase, e change karvanu che
+        // TODO - window size adjustable
         this.make.image({
             x: width / 2,
             y: height / 2,
             key: 'background',
-            //koi pan size ni browser window kholo, barobar scale mate
+            //scale according to brower window
             scale: {x: width / (1.2 * 3840), y: height / 2160}
         });
+
+        // Add logo
         this.add.image(width / 2, height / 6.8, 'logo').setScale(2.2);
 
+        // Add GameBoard
         var gameBoard = this.add.image(width / 2, height / 1.7, 'gameBoard').setScale(1.3);
 
         // hard-coded for the time being
@@ -60,18 +62,19 @@ export default class PlayGameScene extends Phaser.Scene {
             }
         }
 
+        // Tie-breaker pattern
         this.add.rexRoundRectangleCanvas(width / 2.3, height / 1.33, 205, 100, 30, 0xBF9001, 0xBF9001, 2);
         this.add.image(width / 2.3, height / 1.33, this.tieBreakerPattern).setScale(0.6);
 
         this.label = this.add.text(width / 2, height / 1.35, "Player 1's turn",
-                                   { fontSize: '28px Arial', fontStyle: 'bold', fill: '#BF9001' });
+                                   {fontSize: '28px Arial', fontStyle: 'bold', fill: '#BF9001'});
         this.label.setOrigin(0,0);
     }
 
     whoseTurnIsIt() {
         let self = this;
         let t = (this.whoseTurn == PLAYER_SWORD ? "Player 1's turn" : "Player 2's turn");
-        console.log(winner);
+
         if (winner) {
             switch (winner) {
                 case 1:
@@ -86,8 +89,8 @@ export default class PlayGameScene extends Phaser.Scene {
             }
             this.label.setText(t);
             setTimeout(function() {
-                self.scene.start('PlayAgainScene', {text: t,
-                                                   previousScene: "PlayGameScene"});
+                self.scene.start('PlayAgainScene', {
+                                 text: t, previousScene: "PlayGameScene"});
             }, 800);
         }
         this.label.text = t;
@@ -112,8 +115,7 @@ export default class PlayGameScene extends Phaser.Scene {
 				occupiedBy = PLAYER_SWORD;
 			}
             else {
-				playerImage = owner.add.image(this.x, this.y,
-					'shield', 0);
+				playerImage = owner.add.image(this.x, this.y, 'shield', 0);
 
 				occupiedBy = PLAYER_SHIELD;
 			}
@@ -128,7 +130,6 @@ export default class PlayGameScene extends Phaser.Scene {
 			} else {
 				owner.whoseTurn = PLAYER_SWORD;
 			}
-
 		}
 
 		owner.whoseTurnIsIt();

@@ -4,9 +4,6 @@ export default class PlayAgainScene extends Phaser.Scene {
 		super('PlayAgainScene');
 	}
 
-	preload() {
-	}
-
     init(data) {
         this.winnerInfo = data.text;
         this.previousScene = data.previousScene;
@@ -14,16 +11,15 @@ export default class PlayAgainScene extends Phaser.Scene {
 
 	create() {
 
-        var width = this.game.config.width;
-        var height = this.game.config.height;
+        let width = this.game.config.width;
+        let height = this.game.config.height;
 
-        // todo - if image loaded in smaller/different (not full screen) sized  window
-        //  and then window size changed, e j image scale thase, e change karvanu che
+        // TODO - window size adjustable
         this.make.image({
             x: width / 2,
             y: height / 2,
             key: 'background',
-            //koi pan size ni browser window kholo, barobar scale mate
+            //scale according to brower window
             scale: {x: width / (1.2 * 3840), y: height / 2160}
         });
 
@@ -33,11 +29,14 @@ export default class PlayAgainScene extends Phaser.Scene {
         // Add GameBoard
         var gameBoard = this.add.image(width / 2, height / 1.7, 'gameBoard').setScale(1.3);
 
+        // Winner Information text
+        this.add.text(width / 2, height / 2.3, this.winnerInfo, {
+                      fontSize: '32px Arial',
+                      fontStyle: 'bold',
+                      fill: '#BF9001'})
+                      .setOrigin(0.5, 0.5);
 
-        this.add.text(width / 2, height / 2.3, this.winnerInfo,
-                      { fontSize: '32px Arial', fontStyle: 'bold',
-                      fill: '#BF9001' }).setOrigin(0.5, 0.5);
-
+        // PlayAgain button, play another round with same mode (AI/2 Player)
         var playAgain = this.add.image(width / 2, height / 1.8, 'playAgain').setInteractive();
         playAgain.on('pointerdown', function () {
             if (this.previousScene == "PlayAIScene") {
@@ -47,10 +46,11 @@ export default class PlayAgainScene extends Phaser.Scene {
                 this.scene.start('PlayGameScene');
             }
         }, this);
+
+        // Quit button, takes back to HomeScene
         var quit = this.add.image(width / 2, height / 1.4, 'quit').setInteractive();
         quit.on('pointerdown', function () {
             this.scene.start('HomeScene');
         }, this);
-
 	}
 }
