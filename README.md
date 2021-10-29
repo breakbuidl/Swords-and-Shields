@@ -21,13 +21,13 @@ The first part here is to let the user drag and drop blocks to create a new tie-
 
 In Phaser, this can be done with setting up drop zones. A 3x4 grid with 4 blocks to drag and drop. After the user has fixed the pattern, on the backend it will be converted into a matrix with replacing empty blocks with 0 and deleting empty rows/columns. This way, the problem will be reduced to finding every instance of a submatrix in the given matrix.
 
-|   | # |   |   |            
-|---|---|---|---|     ->      | 0 | # | 0 |
+|   | # |   |   |             | 0 | # | 0 |
+|---|---|---|---|     ->      | --- | --- | --- |
 | # | # | # |   |             | # | # | # |
 |   |   |   |   |
 
-|   |   | # | # |
-|---|---|---|---|    ->       | 0 | 0 | # | # |
+|   |   | # | # |             |0|0|#|#|
+|---|---|---|---|    ->       | --- | --- | --- | --- |
 | # | # |   |   |             | # | # | 0 | 0 |
 |   |   |   |   |
 
