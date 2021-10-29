@@ -89,12 +89,10 @@ export default class PlayAIScene extends Phaser.Scene {
                     break;
             }
             this.label.setText(t);
-            self.scene.start('PlayAgainScene', {text: t,
-                                                   previousScene: "PlayAIScene"});
-            // setTimeout(function() {
-            //     self.scene.start('PlayAgainScene',
-            //                      {text: t, previousScene: "PlayAIScene"});
-            // }, 800);
+            setTimeout(function() {
+                self.scene.start('PlayAgainScene',
+                                 {text: t, previousScene: "PlayAIScene"});
+            }, 800);
         }
         this.label.setText(t);
     }
@@ -123,10 +121,10 @@ export default class PlayAIScene extends Phaser.Scene {
 
             owner.switchTurn();
             owner.whoseTurnIsIt();
-            // setTimeout(function() {
-            //     owner.AIMove(offset);
-            // }, 200);
-            owner.AIMove(offset);
+            setTimeout(function() {
+                owner.AIMove(offset);
+            }, 175);
+            // owner.AIMove(offset);
         }
     }
 
@@ -138,8 +136,14 @@ export default class PlayAIScene extends Phaser.Scene {
         let self = this;
         let playerSprite;
 
+        console.log('sdf');
+        console.log(BOARD);
         if (this.totalCellsOccupied == 1) {
             this.getStaticMove(userMove);
+        }
+        else if (this.checkForImminentWinner(BOARD)) {
+            console.log(choice);
+            console.log("print something");
         }
         else {
             this.alphaBetaMinimax(BOARD, 0, -Infinity, +Infinity);
@@ -347,6 +351,112 @@ export default class PlayAIScene extends Phaser.Scene {
 
       // It is a tie
       return 3;
+    }
+
+    // Checks if given board has a winning combination
+    checkForImminentWinner(board) {
+        let countOccupiedAI = 0;
+        let countOccupiedUser = 0;
+        let nobodyPosition = 0;
+
+        // Check for horizontal wins
+        for (let i = 0; i <= 12; i += 4) {
+            countOccupiedAI = 0;
+            countOccupiedUser = 0;
+            nobodyPosition = 0;
+            for (let j = 0; j < 4; j++) {
+                // Check if all elements in the row are same and there's no two empty cells
+                if ((countOccupiedAI && countOccupiedUser) ||
+                    (countOccupiedAI + countOccupiedUser) < j - 1) {
+                    break;
+                }
+                if (board[i + j] === NOBODY)
+                    nobodyPosition = i + j;
+                else
+                    board[i + j] === PLAYER_AI ? countOccupiedAI++ : countOccupiedUser++;
+            }
+
+            if ((countOccupiedAI == 3 && countOccupiedUser == 0) ||
+                (countOccupiedUser == 3 && countOccupiedAI == 0)) {
+                choice = nobodyPosition;
+                console.log("1");
+                return true;
+            }
+        }
+
+        // Check for vertical wins
+        for (let i = 0; i < 4; i++) {
+            countOccupiedAI = 0;
+            countOccupiedUser = 0;
+            nobodyPosition = 0;
+            for (let j = 0; j < 4; j++) {
+                // Check if all elements in the row are same and there's no two empty cells
+                if ((countOccupiedAI && countOccupiedUser) ||
+                    (countOccupiedAI + countOccupiedUser) < j - 1) {
+                    break;
+                }
+                if (board[i + (j*4)] === NOBODY)
+                    nobodyPosition = i + (j*4);
+                else
+                    board[i + (j*4)] === PLAYER_AI ? countOccupiedAI++ : countOccupiedUser++;
+            }
+
+            if ((countOccupiedAI == 3 && countOccupiedUser == 0) ||
+                (countOccupiedUser == 3 && countOccupiedAI == 0)) {
+                choice = nobodyPosition;
+                console.log("v");
+                return true;
+            }
+        }
+
+        // Check for main diagonal win
+        countOccupiedAI = 0;
+        countOccupiedUser = 0;
+        nobodyPosition = 0;
+        for (let i = 0; i < 16; i += 5) {
+            // Check if all elements in the row are same and there's no two empty cells
+            if ((countOccupiedAI && countOccupiedUser) ||
+                (countOccupiedAI + countOccupiedUser) < (i/5) - 1) {
+                break;
+            }
+            if (board[i] === NOBODY)
+              nobodyPosition = i;
+            else
+                board[i] === PLAYER_AI ? countOccupiedAI++ : countOccupiedUser++;
+        }
+
+        if ((countOccupiedAI == 3 && countOccupiedUser == 0) ||
+            (countOccupiedUser == 3 && countOccupiedAI == 0)) {
+            choice = nobodyPosition;
+            console.log("3");
+            return true;
+        }
+
+        // Check for secondary diagonal win
+        countOccupiedAI = 0;
+        countOccupiedUser = 0;
+        nobodyPosition = 0;
+        for (let i = 3; i <= 12; i += 3) {
+            // Check if all elements in the row are same and there's no two empty cells
+            if ((countOccupiedAI && countOccupiedUser) ||
+               (countOccupiedAI + countOccupiedUser) < (i/3) - 2) {
+                break;
+            }
+            if (board[i] === NOBODY)
+                nobodyPosition = i;
+            else
+                board[i] === PLAYER_AI ? countOccupiedAI++ : countOccupiedUser++;
+        }
+
+        if ((countOccupiedAI == 3 && countOccupiedUser == 0) ||
+            (countOccupiedUser == 3 && countOccupiedAI == 0)) {
+            choice = nobodyPosition;
+            console.log("4");
+            return true;
+        }
+
+        // No imminent winner
+        return false;
     }
 
     // Simulates board with a possible move
