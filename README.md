@@ -13,7 +13,25 @@ The game is built using Node.js and HTML5 game framework Phaser.
 
 ### Act 1 || Scene 1
 
-For the time being, '4 in a line' winning combination is set as default tie-breaker pattern. Users can play a 2-player 4x4 tic-tac-toe on the same device.
+For the time being, '4 in a line' winning combination is set as default tie-breaker pattern. Users can play a 2-player 4x4 tic-tac-toe on the same device. The Play Again functionality is woking fine for a 2-player game, a little bug to be fixed the AI game!
+
+### Act 2 || Scene 2
+
+The first part here is to let the user drag and drop blocks to create a new tie-breaker pattern.
+
+In Phaser, this can be done with setting up drop zones. A 3x4 grid with 4 blocks to drag and drop. After the user has fixed the pattern, on the backend it will be converted into a matrix with replacing empty blocks with 0 and deleting empty rows/columns. This way, the problem will be reduced to finding every instance of a submatrix in the given matrix.
+
+|   | # |   |   |            
+|---|---|---|---|     ->      | 0 | # | 0 |
+| # | # | # |   |             | # | # | # |
+|   |   |   |   |
+
+|   |   | # | # |
+|---|---|---|---|    ->       | 0 | 0 | # | # |
+| # | # |   |   |             | # | # | 0 | 0 |
+|   |   |   |   |
+
+Now, when the 2 players end up in a tie, for both the players, the alogrithm finds all the instances of any of the four rotated forms of the pattern submatrix in the game board matrix.
 
 ### Act 3 || Scene 1
 
