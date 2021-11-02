@@ -1,8 +1,5 @@
 # The Insane Coding Challenge
 
-My take on the <a href="https://github.com/terabithian007/InsaneCodingChallenge">
-InsaneAI Coding Challenge</a>
-
 Web-game link: https://swords--and--shields.herokuapp.com/
 
 (It's best viewed with a 1920x1080 resolution screen in a maximised Firefox browser window)
@@ -13,7 +10,7 @@ The game is built using Node.js and HTML5 game framework Phaser.
 
 ### Act 1 || Scene 1
 
-For the time being, '4 in a line' winning combination is set as default tie-breaker pattern. Users can play a 2-player 4x4 tic-tac-toe on the same device. The Play Again functionality is woking fine for a 2-player game, a little bug to be fixed the AI game!
+For the time being, '4 in a line' winning combination is set as default tie-breaker pattern. Users can play a 2-player 4x4 tic-tac-toe on the same device. The Play Again functionality is woking fine for a 2-player game, a little bug to be fixed in the AI part!
 
 ### Act 2 || Scene 2
 
